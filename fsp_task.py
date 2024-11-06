@@ -2,13 +2,73 @@
 # Define the reward function
 import random
 
+import numpy as np
 import torch
+from matplotlib import pyplot as plt
 from torch.utils.data import Dataset
 from torch.autograd import Variable
 from tqdm import trange, tqdm
 import os
 import pandas as pd
 import sys
+
+def GetMachineTime(num_machines, num_jobs, processing_times):
+    # 初始化每台机器的可用时间
+    machine_available_times = [0] * num_machines
+
+    # 计算每个工件完成的时间
+    job_completion_times = [0] * num_jobs
+
+    # 初始化每台机器每个工件的加工起始和结束时间
+    machine_start_times = [[0] * num_jobs for _ in range(num_machines)]
+    machine_end_times = [[0] * num_jobs for _ in range(num_machines)]
+
+    # 计算流水线总时间
+    for job in range(num_jobs):
+        start_time = 0
+        for machine in range(num_machines):
+            start_time = max(start_time, machine_available_times[machine])
+            machine_start_times[machine][job] = start_time
+            machine_available_times[machine] = start_time + processing_times[job][machine]
+            machine_end_times[machine][job] = machine_available_times[machine]
+            start_time = machine_available_times[machine]
+        job_completion_times[job] = start_time
+
+    total_time = job_completion_times[-1]
+    #fig = plt.figure()
+    fig=plt.figure(figsize=(15, 8))  # 设置DPI为100
+    M = ['red', 'blue', 'yellow', 'orange', 'green', 'moccasin', 'purple', 'pink', 'navajowhite', 'Thistle',
+         'Magenta', 'SlateBlue', 'RoyalBlue', 'Aqua', 'floralwhite', 'ghostwhite', 'goldenrod', 'mediumslateblue',
+         'navajowhite','navy', 'sandybrown']
+    M_num=0
+    for i in range(0,num_machines):
+        for j in range(0,num_jobs):
+            Start_time=machine_start_times[i][j]
+            End_time=machine_end_times[i][j]
+            Job=j
+            plt.barh(M_num, width=End_time - Start_time, height=0.8, left=Start_time, color=M[Job%21], edgecolor='black')
+            plt.text(x=Start_time + ((End_time - Start_time) / 2 -4), y=M_num-0.08 ,
+                     s=Job+1, size=15, fontproperties='Times New Roman')
+        M_num += 1
+   # opline=[sum(Machine[0:i+1])-0.5 for i in range(len(Machine))]
+
+    # for i in range(len(opline)):
+    #     plt.hlines(opline[i],xmin=0,xmax=500, colors='black',linestyles='solid',label="OP"+str(i+1))
+    plt.yticks(np.arange(M_num + 1), np.arange(1, M_num + 2), size=20, fontproperties='Times New Roman')
+    plt.xticks(size=20, fontproperties='Times New Roman')
+    plt.ylabel("机器", size=20, fontproperties='SimSun')
+    plt.xlabel("时间", size=20, fontproperties='SimSun')
+    plt.tick_params(labelsize=20)
+    plt.tick_params(direction='in')
+    plt.show()
+    # 返回总时间和每台机器每个工件的加工起始和结束时间
+    return total_time, machine_start_times, machine_end_times
+
+
+
+
+
+
 
 def GetProcessTime(num_machines,num_jobs,processing_times):
     # 机器数量
