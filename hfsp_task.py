@@ -571,10 +571,28 @@ Machine=[3,2,3,2]
 agv_num=4
 PT,agv_trans=Generate(State,Job,Machine)
 
+import pickle
+# 打开一个文件用于写入
+with open('data//instance.pkl', 'wb') as file:
+    # 使用pickle将多维列表序列化并写入文件
+    pickle.dump(PT, file)
+
+
+
 if __name__ == '__main__':
    # create_dataset(128, 128, 'data\\hfsp', 20, 123)
-    training_dataset = HfspDataset('data/hfsp/hfsp-size-128-len-20-train.txt')
+   # training_dataset = HfspDataset('data/hfsp/hfsp-size-128-len-20-train.txt')
     print("")
+
+    import pickle
+
+    # 打开.pkl文件
+    with open('data//instance.pkl', 'rb') as file:
+        data = pickle.load(file)
+
+    # 打印读取的数据
+    print(data)
+
 
 
 

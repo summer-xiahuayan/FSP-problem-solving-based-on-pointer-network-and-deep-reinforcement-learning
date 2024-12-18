@@ -28,8 +28,8 @@ if __name__ == '__main__':
     # Data
     parser.add_argument('--task', default='hfsp_20', help="The task to solve, in the form {COP}_{size}, e.g., tsp_20")
     parser.add_argument('--batch_size', default=128, help='')
-    parser.add_argument('--train_size', default=128, help='')
-    parser.add_argument('--val_size', default=128, help='')
+    parser.add_argument('--train_size', default=100000, help='')
+    parser.add_argument('--val_size', default=1000, help='')
     # Network
     parser.add_argument('--embedding_dim', default=256, help='Dimension of input embedding')
     parser.add_argument('--hidden_dim', default=256, help='Dimension of hidden layers in Enc/Dec')
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     # Misc
     parser.add_argument('--log_step', default=50, help='Log info every log_step steps')
     parser.add_argument('--log_dir', type=str, default='logs')
-    parser.add_argument('--run_name', type=str, default='train_size_128_')
+    parser.add_argument('--run_name', type=str, default='train_size_100000')
     parser.add_argument('--output_dir', type=str, default='outputs')
     parser.add_argument('--epoch_start', type=int, default=0, help='Restart at epoch #')
     parser.add_argument('--load_path', type=str, default='')
@@ -297,13 +297,16 @@ if __name__ == '__main__':
                         i, batch_id, R.mean().item()))
                     example_output = []
                     example_input = []
-                    for idx, action in enumerate(actions):
+                    for idx, action in enumerate(actions_idxs):
                         if task[0] == 'tsp':
-                            example_output.append(actions_idxs[idx][0].item())
+                            example_output.append(action[0].cpu())
                         elif task[0] == 'fsp':
                             example_output.append(action[0].cpu())
+                        elif task[0]=='hfsp':
+                            example_output.append(action[0].cpu())
                         else:
-                            example_output.append(action[0].item())  # <-- ??
+                            example_output.append(action[0].cpu())
+                            #print(action)
                         example_input.append(sample_batch[0, :, idx][0])
                     #print('Example train input: {}'.format(example_input))
                     print('Example train output: {}'.format(example_output))
