@@ -533,7 +533,7 @@ class NeuralCombOptRL(nn.Module):
         #v = self.critic_net(embedded_inputs)
     
         # [batch_size]
-        R = self.objective_fn(actions, self.use_cuda)
+        R = self.objective_fn(action_idxs, self.use_cuda)
         
         #return R, v, probs, actions, action_idxs
         return R, probs, actions, action_idxs

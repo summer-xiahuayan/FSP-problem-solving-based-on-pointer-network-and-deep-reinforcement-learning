@@ -26,8 +26,7 @@ def gantt(processing_times,num_machines,num_jobs):
 if __name__ == '__main__':
 
     # 假设你的模型保存在 'path_to_saved_model.pt'
-    model_path = r"C:\Users\Administrator\PycharmProjects\FSP-problem-solving-based-on-pointer-network-and-deep-reinforcement-learning\outputs\fsp_20\train_size_1000000\epoch-0.pt"
-
+    model_path = r"E:\PYCHARM\pycharm project\FSP-problem-solving-based-on-pointer-network-and-deep-reinforcement-learning\output\fsp_20\train_size_1000000\DRL_FSP_20.pt"
     # 加载模型
     model = torch.load(model_path)
 

@@ -1,4 +1,7 @@
 data/
+output/
 outputs/
 img/
 __pycache__/
+logs/
+.idea/
