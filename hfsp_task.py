@@ -257,7 +257,7 @@ class Scheduling:
             # 无AGV
             s, e, t=max(last_od,last_Md[Machine],),max(last_od,last_Md[Machine])+M_time[Machine],M_time[Machine]
 
-            #有AGV
+            #有AGVgit
             #s, e, t=max(last_Md[Machine],max(last_od,best_e)),max(last_Md[Machine],max(last_od,best_e))+M_time[Machine],M_time[Machine]
             self.Jobs[i].update(s, e,Machineidx, t,0,T)
             self.Machines[Stage][Machine].update(s, e,i, t,self.Jobs[i].op,T)
